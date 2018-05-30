@@ -61,15 +61,15 @@ class Orc:
         self.maxHealth = 70
         self.health = self.maxHealth
         self.attack = 7
-        self.goldGain = 20    
+        self.goldGain = 20
 OrcIG = Orc("Orc")
 
 def main():
     clearConsole()
     print "Welcome to my game!\n"
-    print "1.) Start"    
-    print "2.) Load"    
-    print "3.) Exit"    
+    print "1.) Start"
+    print "2.) Load"
+    print "3.) Exit"
     option = raw_input('-> ')
     if option == "1":
         initGame()
@@ -182,7 +182,7 @@ def fight():
     print "%s     vs     %s" % (PlayerIG.name, enemy.name)
     print "%s's Health: %i/%i     %s's Health: %i/%i" % (PlayerIG.name, PlayerIG.health, PlayerIG.maxHealth, enemy.name, enemy.health, enemy.maxHealth)
     print "Potions: %i" % PlayerIG.pots
-    print "1.) Attack"    
+    print "1.) Attack"
     print "2.) Drink Potion"
     print "3.) Run"
     option = raw_input('-> ')
@@ -233,7 +233,7 @@ def drinkPot():
         PlayerIG.health += 30
         PlayerIG.pots -= 1
         if PlayerIG.health > PlayerIG.maxHealth:
-            PlayerIG.health = PlayerIG.maxHealth 
+            PlayerIG.health = PlayerIG.maxHealth
         print "You drank a potion!"
     option = raw_input(' ')
     fight()
@@ -279,8 +279,9 @@ def store():
     clearConsole()
     print "Welcome to the shop!"
     print "\nWhat whould you like to buy?\n"
-    print "1.) Great Sword"
-    print "2.) Potion"
+    print "1.) Great Sword - 40G"
+    print "2.) Axe - 45G"
+    print "2.) Potion - 15G"
     print "b to go back"
     print " "
     option = raw_input('Type the name of the weapon (or "back") -> ')
@@ -296,7 +297,7 @@ def store():
             print "You don't have enough gold"
         option = raw_input(' ')
         store()
-    elif option == 'potion':
+    elif option.lower() == 'potion':
         if PlayerIG.gold >= 15:
             clearConsole()
             PlayerIG.pots += 1
