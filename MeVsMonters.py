@@ -28,7 +28,7 @@ class Player:
 
     @property
     def attack(self):
-        attack = self.base_attack
+        attack = int(self.base_attack + (0.1 * self.base_attack * self.level))
         if self.currentWeapon == "Rusty Sword":
             attack += 5
         if self.currentWeapon == "Great Sword":
@@ -255,7 +255,7 @@ def run():
 def win():
     clearConsole()
     PlayerIG.gold += enemy.goldGain
-    experience = math.fabs(enemy.attack/3)
+    experience = int(enemy.attack/3)
     PlayerIG.experience += experience
     enemy.health = enemy.maxHealth
     print "You have defeated the %s!" % enemy.name
@@ -264,7 +264,7 @@ def win():
     if PlayerIG.experience >= PlayerIG.xpToUp:
         PlayerIG.level += 1
         PlayerIG.experience = PlayerIG.experience - PlayerIG.xpToUp
-        PlayerIG.xpToUp = math.fabs(math.pow(PlayerIG.level, 3/2))
+        PlayerIG.xpToUp = int(math.pow(PlayerIG.level, 3/2))
         print "You up to level %i" % PlayerIG.level
     option = raw_input(' ')
     start()
