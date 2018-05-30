@@ -3,11 +3,14 @@ import os
 import random
 import pickle
 import math
+import platform
 
 weapons = {
     "Great Sword": 40,
     "Axe": 45
 }
+
+system = platform.system()
 
 class Player:
     def __init__(self, name):
@@ -43,17 +46,26 @@ class Gobelin:
         self.goldGain = 10
 GobelinIG = Gobelin("Gobelin")
 
+class Troll:
+    def __init__(self, name):
+        self.name = name
+        self.maxHealth = 100
+        self.health = self.maxHealth
+        self.attack = 4
+        self.goldGain = 15
+TrollIG = Troll("Troll")
+
 class Orc:
     def __init__(self, name):
         self.name = name
         self.maxHealth = 70
         self.health = self.maxHealth
         self.attack = 7
-        self.goldGain = 15     
+        self.goldGain = 20    
 OrcIG = Orc("Orc")
 
 def main():
-    os.system('clear')
+    clearConsole()
     print "Welcome to my game!\n"
     print "1.) Start"    
     print "2.) Load"    
@@ -63,7 +75,7 @@ def main():
         initGame()
     elif option == "2":
         if os.path.exists("savefile") ==  True:
-            os.system('clear')
+            clearConsole()
             with open("savefile", 'rb') as f:
                 global PlayerIG
                 PlayerIG = pickle.load(f)
@@ -80,7 +92,7 @@ def main():
         main()
 
 def initGame():
-    os.system('clear')
+    clearConsole()
     print "Hello, what is your name?"
     option = raw_input('-> ')
     global PlayerIG
@@ -88,7 +100,7 @@ def initGame():
     start()
 
 def start():
-    os.system('clear')
+    clearConsole()
     print "Name: %s" % PlayerIG.name
     print "Health: %i/%i" % (PlayerIG.health, PlayerIG.maxHealth)
     print "Level: %i (%i/%i)" % (PlayerIG.level, PlayerIG.experience, PlayerIG.xpToUp)
@@ -107,7 +119,7 @@ def start():
     elif option == '2':
         store()
     elif option == '3':
-        os.system('clear')
+        clearConsole()
         with open('savefile', 'wb') as f:
             pickle.dump(PlayerIG, f)
             print '\nGame has been saved!\n'
@@ -121,7 +133,7 @@ def start():
         start()
 
 def inventory():
-    os.system('clear')
+    clearConsole()
     print "What do you want to do?"
     print "1.) Equip weapon"
     print "b.) Go back"
@@ -134,7 +146,7 @@ def inventory():
         inventory()
 
 def equip():
-    os.system('clear')
+    clearConsole()
     print "What do you want to equip?"
     for weapon in PlayerIG.weapons:
         print weapon
@@ -156,15 +168,17 @@ def equip():
 
 def preFight():
     global enemy
-    enemyNum = random.randint(1, 2)
+    enemyNum = random.randint(1, 3)
     if enemyNum == 1:
         enemy = GobelinIG
+    elif enemyNum == 2:
+        enemy = TrollIG
     else:
         enemy = OrcIG
     fight()
 
 def fight():
-    os.system('clear')
+    clearConsole()
     print "%s     vs     %s" % (PlayerIG.name, enemy.name)
     print "%s's Health: %i/%i     %s's Health: %i/%i" % (PlayerIG.name, PlayerIG.health, PlayerIG.maxHealth, enemy.name, enemy.health, enemy.maxHealth)
     print "Potions: %i" % PlayerIG.pots
@@ -182,9 +196,9 @@ def fight():
         fight()
 
 def attack():
-    os.system('clear')
+    clearConsole()
     PlayerAttackAction()
-    os.system('clear')
+    clearConsole()
     EnemyAttackAction()
 
 def PlayerAttackAction():
@@ -212,7 +226,7 @@ def EnemyAttackAction():
         fight()
 
 def drinkPot():
-    os.system('clear')
+    clearConsole()
     if PlayerIG.pots == 0:
         print "You don't have any potions!"
     else:
@@ -225,7 +239,7 @@ def drinkPot():
     fight()
 
 def run():
-    os.system('clear')
+    clearConsole()
     runNum = random.randint(1, 3)
     if runNum == 3:
         print "You have successfully ran away!"
@@ -234,12 +248,12 @@ def run():
     else:
         print "You failed to get away"
         option = raw_input(' ')
-        os.system('clear')
+        clearConsole()
         EnemyAttackAction()
         option = raw_input(' ')
 
 def win():
-    os.system('clear')
+    clearConsole()
     PlayerIG.gold += enemy.goldGain
     experience = math.fabs(enemy.attack/3)
     PlayerIG.experience += experience
@@ -250,18 +264,19 @@ def win():
     if PlayerIG.experience >= PlayerIG.xpToUp:
         PlayerIG.level += 1
         PlayerIG.experience = PlayerIG.experience - PlayerIG.xpToUp
-        PlayerIG.xpToUp = math.fabs(math.pow(self.level, 3/2))
+        PlayerIG.xpToUp = math.fabs(math.pow(PlayerIG.level, 3/2))
+        print "You up to level %i" % PlayerIG.level
     option = raw_input(' ')
     start()
 
 def die():
-    os.system('clear')
+    clearConsole()
     print "You have died"
     option = raw_input(' ')
     main()
 
 def store():
-    os.system('clear')
+    clearConsole()
     print "Welcome to the shop!"
     print "\nWhat whould you like to buy?\n"
     print "1.) Great Sword"
@@ -272,29 +287,29 @@ def store():
 
     if option in weapons:
         if PlayerIG.gold >= weapons[option]:
-            os.system('clear')
+            clearConsole()
             PlayerIG.gold -= weapons[option]
             PlayerIG.weapons.append(option)
             print "You have bought %s" % option
         else:
-            os.system('clear')
+            clearConsole()
             print "You don't have enough gold"
         option = raw_input(' ')
         store()
     elif option == 'potion':
         if PlayerIG.gold >= 15:
-            os.system('clear')
+            clearConsole()
             PlayerIG.pots += 1
             print "You have bought %s" % option
         else:
-            os.system('clear')
+            clearConsole()
             print "You don't have enough gold"
         option = raw_input(' ')
         store()
     elif option == 'b':
         start()
     else:
-        os.system('clear')
+        clearConsole()
         print "That item does not exist"
         option = raw_input(' ')
         store()
@@ -303,5 +318,11 @@ def store():
 # Util methods
 def getRandomAttack(entity):
     return random.randint(entity.attack / 2, entity.attack)
+
+def clearConsole():
+    if (system == 'Linux' or system == 'Darwin'):
+        os.system('clear')
+    elif system == 'Windows':
+        os.system('cls')
 
 main()
